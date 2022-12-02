@@ -11,6 +11,8 @@ session_start();
 
 date_default_timezone_set('America/Winnipeg');
 
+$file_error = false;
+
 function file_upload_path($original_filename, $upload_subfolder_name = 'images')
 {
     $current_folder = dirname(__FILE__);
@@ -48,7 +50,10 @@ if($image_upload_detected)
     {
 
         move_uploaded_file($temp_image_path, $new_image_path);
-
+    }
+    else
+    {
+        $file_error = true;
     }
 }
 
@@ -71,7 +76,7 @@ $selection_error = false;
 $too_many_selections_error = false;
 
 
-if(isset($_POST['title']) && isset($_POST['content']))
+if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
 {
     if($_POST['pokemonlist'] > 0 && $_POST['locationlist'] > 0 && $_POST['gymlist'] > 0)
     {
@@ -218,6 +223,12 @@ if(isset($_POST['title']) && isset($_POST['content']))
     }
 }
 
+if(isset($_SESSION['current_user']))
+{
+    $index_of_at = strpos($_SESSION['current_user'], '@');
+    $username = substr($_SESSION['current_user'], 0, $index_of_at);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -241,7 +252,7 @@ if(isset($_POST['title']) && isset($_POST['content']))
         <li><a href="login.php">Login</a></li>
         <?php else: ?>
         <?php if ($_SESSION['current_user_admin'] == 1): ?>
-        <li><a href="admin.php">Admin Tools</a></li>
+        <li><a href="admin.php">Admin Center</a></li>
         <?php endif ?>
         <li><a href="logout.php">Logout</a></li>
         <?php endif ?>
@@ -249,7 +260,7 @@ if(isset($_POST['title']) && isset($_POST['content']))
 </header>
 <body>
     <?php if(isset($_SESSION['current_user'])): ?>
-    <p id="user">Welcome, <?= $_SESSION['current_user'] ?></p>
+    <p id="user">Welcome, <?= $username ?></p>
     <?php endif ?>
     <form method="get" action="search.php">
         <label>Search our Blogs:</label>
@@ -310,8 +321,11 @@ if(isset($_POST['title']) && isset($_POST['content']))
         <?php if($errors): ?>
             <p>*Must contain 1 or more characters.</p>
         <?php endif ?>
-        <label for="image">Image (optional):</label>
+        <label for="image">Image (jpg, jpeg, gif or png.):</label>
         <input type="file" name="image">
+        <?php if($file_error): ?>
+        <p>*File could not be accepted. Valid file types are jpg, jpeg, gif or png.</p>
+        <?php endif ?>
         <input type="submit" name="submit" value="Create Post" />
     </form>
     <?php else: ?>
