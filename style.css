@@ -1,0 +1,286 @@
+/*
+ * Page Header Styles
+ */
+header
+{
+	height: 200px;
+	width: 100%;
+	background-color: #CD2026;
+	border-bottom: 20px solid black;
+	padding: 0px;
+	text-align: center;
+	margin-bottom: 50px;
+}
+
+header img
+{
+	width: 700px;
+	height: 100px;
+	margin: auto;
+}
+
+header ul
+{
+	display: flex;
+	justify-content: space-around;
+	padding: 0px 10px;
+	padding-top: 50px;
+	list-style: none;
+
+}
+
+header ul li
+{
+	flex-direction: row;
+	font-size: 1.5em;
+	font-family: 'Press Start 2P', cursive;
+	list-style: none;
+}
+
+header ul li a
+{
+	color: white;
+	text-decoration: none;
+}
+
+header ul li a:visited
+{
+	color: white;
+}
+
+header ul li a:hover
+{
+/*	font-size: 1.1em;*/
+	transition: 0.2s;
+	box-shadow: 0px 0px 5px darkred;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+*
+{
+	margin: 0px;
+}
+
+
+/*
+ * Form styling
+ */
+
+form
+{
+	border: 3px solid black;
+	border-radius: 15px;
+	padding-top: 10px;
+	margin-top: 25px;
+	width: 60%;
+	margin: 25px auto 25px;
+	padding: 10px;
+}
+
+input, select, textarea
+{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input#content 
+{
+	height: 200px;
+}
+
+form label
+{
+	font-family: 'Press Start 2P', cursive;
+	font-weight: bold;
+}
+
+form p#permission_error
+{
+	font-family: 'Press Start 2P', cursive;
+}
+
+/*
+ * Search/Create Page styling
+ */
+
+div#results
+{
+	width: 60%;
+	margin: auto;
+}
+
+div#results h1, p
+{
+	font-family: 'Press Start 2P', cursive;
+}
+
+div#results p
+{
+	margin: 10px;
+}
+
+div.pokemonresults
+{
+	border: 3px solid black;
+	border-radius: 15px;
+	margin: 15px;
+	padding: 10px;
+}
+
+div.pokemonresults:hover
+{
+	background-color: #ccc;
+	transition: 0.1s;
+	box-shadow: 1px 1px 10px #CD2026;
+}
+
+div#blogresults
+{
+	width: 60%;
+	margin: auto;
+}
+
+div#blogresults p, h1, a
+{
+	font-family: 'Press Start 2P', cursive;
+}
+
+div#blogresults div
+{
+	border: 2px solid black;
+	border-radius: 15px;
+	margin: 10px auto 10px;
+}
+
+div#blogresults div:hover
+{
+	box-shadow: 1px 1px 10px #CD2026;
+	background-color: #ccc;
+}
+
+div#blogresults p
+{
+	margin: 10px;
+}
+
+div#blogresults a
+{
+	color: black;
+}
+
+
+/*
+ * Home Page styling
+ */
+
+article
+{
+	width: 60%;
+	margin: auto;
+}
+
+article h1, p
+{
+	border: 2px solid black;
+	font-family: 'Verdana', cursive;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 10px;
+}
+
+article#read_post h1, p
+{
+	font-family: 'Verdana', cursive;
+	border: none;
+}
+
+article#read_post div
+{
+	border: 2px solid black;
+	border-radius: 10px;
+	margin-bottom: 25px;
+}
+
+article div#mainpage_post
+{
+	border: 2px solid black;
+	border-radius: 10px;
+	margin: 25px 10px;
+}
+
+article a 
+{
+	color: black;
+	text-decoration: none;
+}
+
+article a.editlink
+{
+	color: blue;
+	text-decoration: underline;
+}
+
+article a.editlink:hover
+{
+	color: #CD2026;
+	transition: 0.3s;
+}
+
+article img
+{
+	border: 5px solid black;
+	border-radius: 10px;
+	width: 400px;
+	margin-left: 25px;
+}
+
+div.login_redirect
+{
+	margin: auto;
+	text-align: center;
+}
+
+div.login_redirect p
+{
+	font-family: 'Press Start 2P', cursive;
+}
+
+p#user
+{
+	font-family: 'Press Start 2P', cursive;
+	font-size: 0.8em;
+	float: left;
+	width: 75px;
+}
+
+div#members
+{
+	width: 60%;
+	margin: auto;
+	border: 5px solid black;
+	border-radius: 10px;
+}
+
+body ul
+{
+	padding: 25px;
+	list-style: none;
+}
+
+body ul li 
+{
+	list-style: none;
+}
+
+div.member
+{
+	border: 2px solid black;
+	border-radius: 10px;
+	margin: 10px;
+}
