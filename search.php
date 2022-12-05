@@ -12,7 +12,7 @@ if(isset($_GET['searchquery']))
 
 	$ready_to_search_blogs = true;
 
-	$blog_title_search = "SELECT * FROM post WHERE post_title LIKE CONCAT('%', :usersearch, '%') OR post_desc LIKE CONCAT('%', :usersearch, '%')";
+	$blog_title_search = "SELECT * FROM post WHERE post_title LIKE CONCAT('%', :usersearch, '%') AND active = 1 OR post_desc LIKE CONCAT('%', :usersearch, '%') AND active = 1";
 
 	$title_statement = $db->prepare($blog_title_search);
 	$title_statement->bindValue(':usersearch', $userinput);
@@ -26,14 +26,14 @@ if(isset($_POST['searchbar']))
 
 	$userinput = filter_input(INPUT_POST, 'searchbar', FILTER_SANITIZE_SPECIAL_CHARS);
 
-	$name_search_query = "SELECT p.pokemon_name, p.pokemon_desc, p.pokemon_id, c.ct_name FROM pokemon p 
-						  JOIN category_type c ON p.ct_id_pokemon_type = c.ct_id WHERE pokemon_name LIKE CONCAT('%', :usersearch, '%')";
+	$name_search_query = "SELECT p.pokemon_name, p.pokemon_desc, p.pokemon_id, p.active, c.ct_name FROM pokemon p 
+						  JOIN category_type c ON p.ct_id_pokemon_type = c.ct_id WHERE pokemon_name LIKE CONCAT('%', :usersearch, '%') AND p.active = 1";
 	$name_statement = $db->prepare($name_search_query);
 	$name_statement->bindValue(':usersearch', $userinput);
 	$name_statement->execute();
 
-	$type_search_query = "SELECT p.pokemon_name, p.pokemon_desc, p.pokemon_id, c.ct_name FROM pokemon p 
-						  JOIN category_type c ON p.ct_id_pokemon_type = c.ct_id WHERE c.ct_name LIKE CONCAT('%', :usersearch, '%')";
+	$type_search_query = "SELECT p.pokemon_name, p.pokemon_desc, p.pokemon_id, p.active, c.ct_name FROM pokemon p 
+						  JOIN category_type c ON p.ct_id_pokemon_type = c.ct_id WHERE c.ct_name LIKE CONCAT('%', :usersearch, '%') AND p.active = 1";
 	$type_statement = $db->prepare($type_search_query);
 	$type_statement->bindValue(':usersearch', $userinput);
 	$type_statement->execute();
@@ -45,14 +45,18 @@ if(isset($_POST['blogsearchbar']))
 
 	$userinput = filter_input(INPUT_POST, 'blogsearchbar', FILTER_SANITIZE_SPECIAL_CHARS);
 
-	$blog_title_search = "SELECT * FROM post WHERE post_title LIKE CONCAT('%', :usersearch, '%') OR post_desc LIKE CONCAT('%', :usersearch, '%')";
+	$blog_title_search = "SELECT * FROM post WHERE post_title LIKE CONCAT('%', :usersearch, '%') AND active = 1 OR post_desc LIKE CONCAT('%', :usersearch, '%') AND active = 1";
 
 	$title_statement = $db->prepare($blog_title_search);
 	$title_statement->bindValue(':usersearch', $userinput);
 	$title_statement->execute();
 }
 
-
+if(isset($_SESSION['current_user']))
+{
+    $index_of_at = strpos($_SESSION['current_user'], '@');
+    $username = substr($_SESSION['current_user'], 0, $index_of_at);
+}
 
 ?>
 <!DOCTYPE html>
@@ -77,7 +81,7 @@ if(isset($_POST['blogsearchbar']))
         <li><a href="login.php">Login</a></li>
         <?php else: ?>
         <?php if ($_SESSION['current_user_admin'] == 1): ?>
-        <li><a href="admin.php">Admin Tools</a></li>
+        <li><a href="admin.php">Admin Center</a></li>
         <?php endif ?>
         <li><a href="logout.php">Logout</a></li>
         <?php endif ?>
@@ -85,7 +89,7 @@ if(isset($_POST['blogsearchbar']))
 </header>
 <body>
 	<?php if(isset($_SESSION['current_user'])): ?>
-    <p id="user">Welcome, <?= $_SESSION['current_user'] ?></p>
+    <p id="user">Welcome, <?= $username ?></p>
     <?php endif ?>
 	<form method="post">
 		<label>Search for Generation 1 Pokemon by Name or Type:</label>
