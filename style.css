@@ -105,6 +105,12 @@ form p#permission_error
 	font-family: 'Press Start 2P', cursive;
 }
 
+form h1
+{
+	text-align: center;
+	margin: 25px;
+}
+
 /*
  * Search/Create Page styling
  */
@@ -256,7 +262,7 @@ p#user
 	font-family: 'Press Start 2P', cursive;
 	font-size: 0.8em;
 	float: left;
-	width: 75px;
+	width: 50px;
 }
 
 div#members
@@ -283,4 +289,9 @@ div.member
 	border: 2px solid black;
 	border-radius: 10px;
 	margin: 10px;
+}
+
+div.member button
+{
+	margin: 15px;
 }
