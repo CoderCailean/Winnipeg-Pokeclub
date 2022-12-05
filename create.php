@@ -6,6 +6,10 @@
  *
  */
 require('connect.php');
+require '\xampp\htdocs\Project\ImageResize.php';
+require '\xampp\htdocs\Project\ImageResizeException.php';
+
+use \Gumlet\ImageResize;
 
 session_start();
 
@@ -48,8 +52,12 @@ if($image_upload_detected)
     $new_image_path = file_upload_path($image_filename);
     if(file_is_valid($temp_image_path, $new_image_path))
     {
+        $current_folder = dirname(__FILE__);
+        $resized_image = new ImageResize($temp_image_path);
+        $resized_image-> resizeToWidth(300);
+        $resized_image->save($current_folder . '/images/' . $_SESSION['current_user'] . '/' . basename($image_filename));
 
-        move_uploaded_file($temp_image_path, $new_image_path);
+        //move_uploaded_file($temp_image_path, $new_image_path);
     }
     else
     {
@@ -82,7 +90,7 @@ if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
     {
         $too_many_selections_error = true;
 
-        if($_POST['title'] > 1 && $_POST['content'] > 1)
+        if($_POST['title'] > 0 && $_POST['content'] > 0)
         {
             
         }
@@ -95,7 +103,7 @@ if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
     {
         $too_many_selections_error = true;
 
-        if($_POST['title'] > 1 && $_POST['content'] > 1)
+        if($_POST['title'] > 0 && $_POST['content'] > 0)
         {
 
         }
@@ -108,7 +116,7 @@ if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
     {
         $too_many_selections_error = true;
 
-        if($_POST['title'] > 1 && $_POST['content'] > 1)
+        if($_POST['title'] > 0 && $_POST['content'] > 0)
         {
 
         }
@@ -121,7 +129,7 @@ if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
     {
         $too_many_selections_error = true;
 
-        if($_POST['title'] > 1 && $_POST['content'] > 1)
+        if($_POST['title'] > 0 && $_POST['content'] > 0)
         {
 
         }
@@ -132,7 +140,7 @@ if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
     }
     elseif($_POST['pokemonlist'] > 0 && $_POST['locationlist'] == 0 && $_POST['gymlist'] == 0)
     {
-        if(strlen($_POST['title']) > 1 && strlen($_POST['content']) > 1)
+        if(strlen($_POST['title']) > 0 && strlen($_POST['content']) > 0)
         {
             $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
             $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -161,7 +169,7 @@ if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
     }
     elseif($_POST['pokemonlist'] == 0 && $_POST['locationlist'] > 0 && $_POST['gymlist'] == 0)
     {
-        if(strlen($_POST['title']) > 1 && strlen($_POST['content']) > 1)
+        if(strlen($_POST['title']) > 0 && strlen($_POST['content']) > 0)
         {
             $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
             $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -190,7 +198,7 @@ if(isset($_POST['title']) && isset($_POST['content']) && !$file_error)
     }
     elseif($_POST['pokemonlist'] == 0 && $_POST['locationlist'] == 0 && $_POST['gymlist'] > 0)
     {
-        if(strlen($_POST['title']) > 1 && strlen($_POST['content']) > 1)
+        if(strlen($_POST['title']) > 0 && strlen($_POST['content']) > 0)
         {
             $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
             $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
