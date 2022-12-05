@@ -9,12 +9,23 @@ require('connect.php');
 
 session_start();
 
-$query = "SELECT * FROM post ORDER BY blog_id DESC";
+$query = "SELECT * FROM post WHERE active = 1 ORDER BY blog_id DESC";
 
 $statement = $db->prepare($query);
 
 $statement->execute();
 
+
+if(isset($_SESSION['current_user']))
+{
+    $index_of_at = strpos($_SESSION['current_user'], '@');
+    $username = substr($_SESSION['current_user'], 0, $index_of_at);
+
+    if(!is_dir('images/' . $_SESSION['current_user']))
+    {
+        mkdir('images/' . $_SESSION['current_user']);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +49,7 @@ $statement->execute();
         <li><a href="login.php">Login</a></li>
         <?php else: ?>
         <?php if ($_SESSION['current_user_admin'] == 1): ?>
-        <li><a href="admin.php">Admin Tools</a></li>
+        <li><a href="admin.php">Admin Center</a></li>
         <?php endif ?>
         <li><a href="logout.php">Logout</a></li>
         <?php endif ?>
@@ -46,7 +57,7 @@ $statement->execute();
 </header>
 <body>
     <?php if(isset($_SESSION['current_user'])): ?>
-    <p id="user">Welcome, <?= $_SESSION['current_user'] ?></p>
+    <p id="user">Welcome, <?= $username ?></p>
     <?php endif ?>
     <form method="get" action="search.php">
         <label>Search our Blogs:</label>
