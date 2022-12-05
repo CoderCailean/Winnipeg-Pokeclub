@@ -12,30 +12,42 @@ session_start();
 $requested_post = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
 
-$pokemon_query = "SELECT p.blog_id, p.post_title, p.post_desc, p.post_date, p.user_id, p.image_file, po.pokemon_name, po.pokemon_desc, c.ct_name, co.ct_name            FROM post p
-                JOIN pokemon po ON p.pokemon_id = po.pokemon_id
-                JOIN category_type c ON po.ct_id_pokemon_type = c.ct_id
-                JOIN category_type co ON po.ct_id_pokemon_category = co.ct_id
-                WHERE p.blog_id = :id";
+$pokemon_query = "SELECT p.blog_id, p.post_title, p.post_desc, p.post_date, p.user_id, p.image_file, po.pokemon_name,
+                  po.pokemon_desc, c.ct_name, co.ct_name, u.user_email FROM post p
+                  JOIN pokemon po ON p.pokemon_id = po.pokemon_id
+                  JOIN category_type c ON po.ct_id_pokemon_type = c.ct_id
+                  JOIN category_type co ON po.ct_id_pokemon_category = co.ct_id
+                  JOIN users u ON p.user_id = u.user_id
+                  WHERE p.blog_id = :id";
 $pokemon_statement = $db->prepare($pokemon_query);
 $pokemon_statement->bindValue(':id', $requested_post);
 $pokemon_statement->execute();
 
-$gym_query = "SELECT p.blog_id, p.post_title, p.post_desc, p.post_date, p.user_id, p.image_file, g.gym_leader, g.gym_description, c.ct_name FROM post p
-                JOIN gym g ON p.gym_id = g.gym_id
-                JOIN category_type c ON g.ct_id_type = c.ct_id
-                WHERE p.blog_id = :id";
+$gym_query = "SELECT p.blog_id, p.post_title, p.post_desc, p.post_date, p.user_id, p.image_file, g.gym_leader,
+              g.gym_description, c.ct_name, u.user_email FROM post p
+              JOIN gym g ON p.gym_id = g.gym_id
+              JOIN category_type c ON g.ct_id_type = c.ct_id
+              JOIN users u ON p.user_id = u.user_id
+              WHERE p.blog_id = :id";
 $gym_statement = $db->prepare($gym_query);
 $gym_statement->bindValue(':id', $requested_post);
 $gym_statement->execute();
 
-$location_query = "SELECT p.blog_id, p.post_title, p.post_desc, p.post_date, p.user_id, p.image_file, l.location_name, l.location_description FROM post p
-                JOIN location l ON p.location_id = l.location_id
-                WHERE p.blog_id = :id";
+$location_query = "SELECT p.blog_id, p.post_title, p.post_desc, p.post_date, p.user_id, p.image_file, l.location_name,
+                   l.location_description, u.user_email FROM post p
+                   JOIN location l ON p.location_id = l.location_id
+                   JOIN users u ON p.user_id = u.user_id
+                   WHERE p.blog_id = :id";
 $location_statement = $db->prepare($location_query);
 $location_statement->bindValue(':id', $requested_post);
 $location_statement->execute();
 
+
+if(isset($_SESSION['current_user']))
+{
+    $index_of_at = strpos($_SESSION['current_user'], '@');
+    $username = substr($_SESSION['current_user'], 0, $index_of_at);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,7 +71,7 @@ $location_statement->execute();
         <li><a href="login.php">Login</a></li>
         <?php else: ?>
         <?php if ($_SESSION['current_user_admin'] == 1): ?>
-        <li><a href="admin.php">Admin Tools</a></li>
+        <li><a href="admin.php">Admin Center</a></li>
         <?php endif ?>
         <li><a href="logout.php">Logout</a></li>
         <?php endif ?>
@@ -67,7 +79,7 @@ $location_statement->execute();
 </header>
 <body>
     <?php if(isset($_SESSION['current_user'])): ?>
-    <p id="user">Welcome, <?= $_SESSION['current_user'] ?></p>
+    <p id="user">Welcome, <?= $username ?></p>
     <?php endif ?>
     <form method="get" action="search.php">
         <label>Search our Blogs:</label>
@@ -81,7 +93,7 @@ $location_statement->execute();
                 <h1>Title: <?= $row['post_title'] ?></h1>
                 <p>Date Created: <?= $row['post_date'] ?></p>
                 <?php if($row['image_file'] != NULL): ?>
-                    <img src="images/<?= $row['image_file'] ?>">
+                    <img src="images/<?= $row['user_email'] ?>/<?= $row['image_file'] ?>">
                 <?php endif ?>
                 <p>Discussion Topic: <?= $row['pokemon_name'] ?> - <?= $row['pokemon_desc'] ?></p>
                 <p>Blog Content: <?= $row['post_desc'] ?></p>
