@@ -17,7 +17,6 @@ GROUP BY u.user_id";
 $users_statement = $db->prepare($users_query);
 $users_statement->execute();
 
-
 if(isset($_POST['disable_user']))
 {
     $user = filter_input(INPUT_POST, 'user_id', FILTER_SANITIZE_NUMBER_INT);
